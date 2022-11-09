@@ -32,7 +32,7 @@ vector <planeta> lista;
 
 void salvar(planeta aux){
     ofstream arq;
-    arq.open("dados.dat",ios::binary|ios::app);
+    arq.open("planetas.dat",ios::binary|ios::app);
     arq.write((char*)&aux, sizeof(aux));  
     arq.close();
 }
@@ -53,7 +53,7 @@ void ler(){
     ifstream arq;
     lista.clear();
     
-    arq.open("dados.dat",ios::binary);
+    arq.open("planetas.dat",ios::binary);
 
     while(arq.read((char*)&aux, sizeof(aux))){
         lista.push_back(aux);    

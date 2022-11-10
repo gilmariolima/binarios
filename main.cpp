@@ -28,7 +28,7 @@ class planeta{
 };
 
 int num = 0;
-vector <planeta> lista;
+vector<planeta> lista;
 
 void salvar(planeta aux){
     ofstream arq;

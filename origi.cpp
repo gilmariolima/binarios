@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <string.h>
 
 using namespace std;
 
@@ -28,12 +29,13 @@ class planeta{
 };
 
 int num = 0;
-vector<planeta> lista;
+vector <planeta> lista;
+vector <planeta> novalista;
 
 void salvar(planeta aux){
     ofstream arq;
-    arq.open("planetas.dat",ios::binary|ios::app);
-    arq.write((char*)&aux, sizeof(aux));  
+    arq.open("planetas.dat",ios_base::binary|ios_base::app);
+    arq.write((char*)&aux, sizeof(planeta));  
     arq.close();
 }
 
@@ -53,12 +55,45 @@ void ler(){
     ifstream arq;
     lista.clear();
     
-    arq.open("planetas.dat",ios::binary);
+    arq.open("planetas.dat",ios_base::binary);
 
-    while(arq.read((char*)&aux, sizeof(aux))){
-        lista.push_back(aux);    
+    while(arq.read((char*)&aux, sizeof(planeta))){
+        lista.push_back(aux);
     }
     arq.close();
+}
+
+void novoler(){
+    planeta aux;
+    ifstream arq;
+    lista.clear();
+    
+    arq.open("novo.dat",ios_base::binary);
+
+    while(arq.read((char*)&aux, sizeof(planeta))){
+        lista.push_back(aux);
+    }
+    arq.close();
+}
+
+void apagar(int gravidade){
+    planeta aux;
+    ifstream arq;
+    ofstream fout;
+    lista.clear();
+    
+    arq.open("planetas.dat",ios_base::binary);
+    fout.open("novo.dat",ios_base::binary|ios_base::app);
+
+    while(arq.read((char*)&aux, sizeof(planeta))){
+        if(aux.get_gravidade() != gravidade){
+            fout.write((char*)&aux, sizeof(planeta));  
+        }
+    }
+    fout.close();
+    arq.close();
+    remove("planetas.dat");
+    rename("novo.dat","planetas.dat");  
 }
 
 void ver_lista(){
@@ -67,24 +102,15 @@ void ver_lista(){
     }
 }
 
-void filtrar(){
-    int gravidade;
-    cout << "Gravidade: "; cin >> gravidade;
-    cout << "Planetas com gravidade " << gravidade << endl;
-    for(int i=0; i < lista.size(); i++){
-        if(lista[i].get_gravidade() == gravidade){
-            cout << lista[i].get_nome() << endl;
-        }
-    }
-}
-
 int main(){
     int opc = 1;
+    int gravidade;
 
     while(opc != 0){
         cout << "[ 1 ] Cadastrar\n";
         cout << "[ 2 ] Ver lista\n";
         cout << "[ 3 ] Filtrar\n";
+        cout << "[ 4 ] Deletar\n";
         cout << "[ 0 ] Sair\n";
         cout << ">> ";
         cin >> opc;
@@ -97,8 +123,10 @@ int main(){
                 ler();
                 ver_lista();
                 break;
-            case 3:
-                filtrar();
+            case 4:
+                cout << "gravidade: ";
+                cin >> gravidade; 
+                apagar(gravidade);
                 break;
             default:
                 break;

@@ -63,19 +63,6 @@ void ler(){
     arq.close();
 }
 
-void novoler(){
-    planeta aux;
-    ifstream arq;
-    lista.clear();
-    
-    arq.open("novo.dat",ios_base::binary);
-
-    while(arq.read((char*)&aux, sizeof(planeta))){
-        lista.push_back(aux);
-    }
-    arq.close();
-}
-
 void apagar(int gravidade){
     planeta aux;
     ifstream arq;
